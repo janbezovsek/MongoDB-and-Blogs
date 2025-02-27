@@ -5,7 +5,7 @@ import Register from '../components/Register'
 import './SignUp.css'
 
 
-const SignUp = ({ onShowHome, login, handleLogin }) => {
+const SignUp = ({ onShowHome, handleLogin }) => {
   return (
 
     <>
@@ -39,7 +39,7 @@ const SignUp = ({ onShowHome, login, handleLogin }) => {
             </TabList>
             <TabPanels>
               <TabPanel>
-                <Login login={login} handleLogin={handleLogin}/>
+                <Login handleLogin={handleLogin}/>
               </TabPanel>
               <TabPanel>
                 <Register/>

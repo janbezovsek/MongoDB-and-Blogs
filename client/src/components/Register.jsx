@@ -131,14 +131,14 @@ const Register = () => {
             <Input placeholder="Enter your name" onChange={(e)=>setName(e.target.value)}></Input>
         </FormControl>
 
-        <FormControl id="email" isRequired>
+        <FormControl id="email2" isRequired>
             <FormLabel>
                 Email
             </FormLabel>
             <Input placeholder="Enter your email" onChange={(e)=>setEmail(e.target.value)}></Input>
         </FormControl>
 
-        <FormControl id="password" isRequired>
+        <FormControl id="password2" isRequired>
             <FormLabel>
                 Password
             </FormLabel>
@@ -152,7 +152,7 @@ const Register = () => {
             </InputGroup>  
         </FormControl>
 
-        <FormControl id="password" isRequired>
+        <FormControl id="password3" isRequired>
             <FormLabel>
                 Confirm Password
             </FormLabel>

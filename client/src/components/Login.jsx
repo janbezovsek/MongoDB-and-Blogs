@@ -5,12 +5,12 @@ import { Button } from '@chakra-ui/button'
 import {VStack} from "@chakra-ui/layout"
 import { FormControl, FormLabel } from "@chakra-ui/form-control"
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/input"
-import { useToast } from '@chakra-ui/toast'
+import { useToast } from '@chakra-ui/react'
 
 const cookies = new Cookies()
 
 
-const Login = ({login, handleLogin}) => {
+const Login = ({handleLogin}) => {
 
   
   //state for email
@@ -39,10 +39,9 @@ const Login = ({login, handleLogin}) => {
 //function for login to our account(connection to backend)
 const submitHandler = async () => {
 
-        
     setLoading(true)
 
-    if( !email || !password ) {
+    if( !email && !password ) {
         toast({
             title: 'Please fill all of the fields.',
             description: "Warning",
