@@ -4,6 +4,18 @@ import "./Blogs.css";
 import userImage from '../assets/images/userImage.jpg'
 import noImage from '../assets/images/noImage.jpeg'
 
+const categories = [
+  'general',
+  'world',
+  'business',
+  'technology',
+  'entertainment',
+  'sports',
+  'science',
+  'health',
+  'nation',
+]
+
 const Blogs = ({  onLogin, handleLogout }) => {
 
   //state for storing main news article on the page
@@ -11,6 +23,13 @@ const Blogs = ({  onLogin, handleLogout }) => {
 
   //array of news articles
   const [ news, setNews ] = useState([])
+
+  //state for the type of the news
+  const [ selectedCategory, setSelectedCategory ] = useState('general')
+
+  const [ searchInput, setSearchInput ] = useState('')
+
+  const [ searchQuery, setSearchQuery ] = useState('')
 
   //get login state for toggling between login and logout in navbar
   const state = JSON.parse(localStorage.getItem('login'));
@@ -22,8 +41,14 @@ const Blogs = ({  onLogin, handleLogout }) => {
   //fetching API for news
   useEffect(() => {
     const fetchNews = async () => {
-      const URL = 'https://gnews.io/api/v4/top-headlines?category=general&lang=en&apikey=ad9380e55df5fcb1adc1f84a98faf1c6'
+      let URL = `https://gnews.io/api/v4/top-headlines?category=${selectedCategory}&lang=en&apikey=ad9380e55df5fcb1adc1f84a98faf1c6`
     
+      if(searchQuery) {
+        URL = `https://gnews.io/api/v4/search?q=${searchQuery}&lang=en&apikey=ad9380e55df5fcb1adc1f84a98faf1c6`
+      }
+      
+      
+      
       const response = await axios.get(URL)
 
       const fetchedNews = response.data.articles
@@ -44,7 +69,20 @@ const Blogs = ({  onLogin, handleLogout }) => {
       console.log(fetchedNews[0])
     }
     fetchNews()
-  },[])
+  },[selectedCategory, searchQuery])
+
+  //function for selecting news category
+  const handleCategory = (e, category) => {
+    e.preventDefault()
+    setSelectedCategory(category)
+  }
+
+  //function for searching news
+  const handleSearch = (e) => {
+    e.preventDefault()
+    setSearchQuery(searchInput)
+    setSearchInput('')//clear search input after submition
+  }
 
 
   return (
@@ -67,8 +105,9 @@ const Blogs = ({  onLogin, handleLogout }) => {
             )}
           </div>
           <div className="search-bar">
-            <form>
-              <input type="text" placeholder="Search blogs..." />
+            <form onSubmit={handleSearch}>
+              <input type="text" placeholder="Search news..." value={searchInput}
+              onChange={(e)=> setSearchInput(e.target.value)} />
               <button type="submit">
                 <i className="fa-solid fa-magnifying-glass"></i>
               </button>
@@ -88,33 +127,12 @@ const Blogs = ({  onLogin, handleLogout }) => {
             <nav className="categories">
               <h1 className="nav-heading">Categories</h1>
               <div className="nav-links">
-                <a href="#" className="nav-link">
-                  General
-                </a>
-                <a href="#" className="nav-link">
-                  World
-                </a>
-                <a href="#" className="nav-link">
-                  Business
-                </a>
-                <a href="#" className="nav-link">
-                  Technology
-                </a>
-                <a href="#" className="nav-link">
-                  Entertainment
-                </a>
-                <a href="#" className="nav-link">
-                  Sports
-                </a>
-                <a href="#" className="nav-link">
-                  Science
-                </a>
-                <a href="#" className="nav-link">
-                  Health
-                </a>
-                <a href="#" className="nav-link">
-                  Nation
-                </a>
+                {categories.map((category) => (
+                    <a href="#" key={category} className="nav-link"
+                    onClick={(e)=>handleCategory(e,category)}>
+                    {category}
+                  </a>
+                ))}
                 <a href="#" className="nav-link">
                   Bookmarks <i className="fa-regular fa-bookmark"></i>
                 </a>
