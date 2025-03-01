@@ -28,9 +28,17 @@ const Blogs = ({  onLogin, handleLogout }) => {
   //state for the type of the news
   const [ selectedCategory, setSelectedCategory ] = useState('general')
 
+  //state for search input
   const [ searchInput, setSearchInput ] = useState('')
 
+  //state for searching the news from the API
   const [ searchQuery, setSearchQuery ] = useState('')
+
+  //state for modal
+  const [ showModal, setShowModal ] = useState(false)
+
+  //state for the selected article
+  const [ selectedArticle, setSelectedArticle ] = useState(null)
 
   //get login state for toggling between login and logout in navbar
   const state = JSON.parse(localStorage.getItem('login'));
@@ -85,6 +93,11 @@ const Blogs = ({  onLogin, handleLogout }) => {
     setSearchInput('')//clear search input after submition
   }
 
+  //when article is clicked it shows modal
+  const handleArticle = (article) => {
+    setSelectedArticle(article)
+    setShowModal(true)
+  }
 
   return (
     <>
@@ -141,7 +154,9 @@ const Blogs = ({  onLogin, handleLogout }) => {
             </nav>
           </div>
           <div className="news-section">
-            {headline && (<div className="headline">
+            {headline && (<div className="headline" onClick={()=> 
+              handleArticle(headline)
+            }>
               <img src={headline.image || noImage} alt={userImage} />
               <h2 className="headline-title">
                 {headline.title}
@@ -152,7 +167,8 @@ const Blogs = ({  onLogin, handleLogout }) => {
             
             <div className="news-grid">
               {news.map((article, index)=> (
-                <div key={index} className="news-grid-item">
+                <div key={index} className="news-grid-item" onClick={()=> 
+                  handleArticle(article)}>
                 <img src={article.image || noImage} alt={article.title} />
                   <h3>
                       {article.title}
@@ -162,7 +178,7 @@ const Blogs = ({  onLogin, handleLogout }) => {
               ))}
             </div>
           </div>
-          <NewsModal />
+          <NewsModal show={showModal} article={selectedArticle} onClose={()=>setShowModal(false)}/>
           <div className="my-blogs">My blogs</div>
           <div className="others-blogs">Others blogs</div>
         </div>
