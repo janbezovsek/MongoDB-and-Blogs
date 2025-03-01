@@ -3,6 +3,7 @@ import axios from "axios";
 import "./Blogs.css";
 import userImage from '../assets/images/userImage.jpg'
 import noImage from '../assets/images/noImage.jpeg'
+import NewsModal from "./NewsModal";
 
 const categories = [
   'general',
@@ -161,6 +162,7 @@ const Blogs = ({  onLogin, handleLogout }) => {
               ))}
             </div>
           </div>
+          <NewsModal />
           <div className="my-blogs">My blogs</div>
           <div className="others-blogs">Others blogs</div>
         </div>
