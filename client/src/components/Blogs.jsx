@@ -4,6 +4,8 @@ import "./Blogs.css";
 import userImage from '../assets/images/userImage.jpg'
 import noImage from '../assets/images/noImage.jpeg'
 import NewsModal from "./NewsModal";
+import Bookmarks from "./Bookmarks";
+
 
 const categories = [
   'general',
@@ -179,6 +181,7 @@ const Blogs = ({  onLogin, handleLogout }) => {
             </div>
           </div>
           <NewsModal show={showModal} article={selectedArticle} onClose={()=>setShowModal(false)}/>
+          <Bookmarks />
           <div className="my-blogs">My blogs</div>
           <div className="others-blogs">Others blogs</div>
         </div>
