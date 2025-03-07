@@ -42,6 +42,12 @@ const Blogs = ({  onLogin, handleLogout }) => {
   //state for the selected article
   const [ selectedArticle, setSelectedArticle ] = useState(null)
 
+  //state for bookmarked articles
+  const [ bookmarks, setBookmarks ] = useState([])
+
+  //bookmarks modal visibility
+  const [ showBookmarksModal, setShowBookmarksModal ] = useState(false)
+
   //get login state for toggling between login and logout in navbar
   const state = JSON.parse(localStorage.getItem('login'));
 
@@ -77,7 +83,9 @@ const Blogs = ({  onLogin, handleLogout }) => {
       //news grid images, titles
       setNews(fetchedNews.slice(1, 7))
 
-      console.log(fetchedNews[0])
+      const savedBookmarks = JSON.parse(localStorage.getItem("bookmarks")) || []
+      setBookmarks(savedBookmarks)
+
     }
     fetchNews()
   },[selectedCategory, searchQuery])
@@ -99,6 +107,18 @@ const Blogs = ({  onLogin, handleLogout }) => {
   const handleArticle = (article) => {
     setSelectedArticle(article)
     setShowModal(true)
+  }
+
+  //bookmarked articles function
+  const handleBookmarkClick = (article) => {
+    setBookmarks((prevBookmarks) => {
+      const updatedBookmarks = prevBookmarks.find(
+        (bookmark)=> bookmark.title === article.title) ?
+        prevBookmarks.filter((bookmark)=>bookmark.title !== article.title)
+        : [...prevBookmarks, article]
+        localStorage.setItem('bookmarks', JSON.stringify(updatedBookmarks))
+      return updatedBookmarks
+    })
   }
 
   return (
@@ -149,8 +169,9 @@ const Blogs = ({  onLogin, handleLogout }) => {
                     {category}
                   </a>
                 ))}
-                <a href="#" className="nav-link">
-                  Bookmarks <i className="fa-regular fa-bookmark"></i>
+                <a href="#" className="nav-link" onClick=
+                {()=>setShowBookmarksModal(true)}>
+                  Bookmarks <i className="fa-solid fa-bookmark"></i>
                 </a>
               </div>
             </nav>
@@ -162,7 +183,12 @@ const Blogs = ({  onLogin, handleLogout }) => {
               <img src={headline.image || noImage} alt={userImage} />
               <h2 className="headline-title">
                 {headline.title}
-                <i className="fa-regular fa-bookmark bookmark"></i>
+                <i className={`${bookmarks.some((bookmark)=>
+                bookmark.title === headline.title) ? "fa-solid" : "fa-regular"} fa-bookmark bookmark`}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleBookmarkClick(headline)
+                }}  ></i>
               </h2>
             </div>
           )}
@@ -174,14 +200,23 @@ const Blogs = ({  onLogin, handleLogout }) => {
                 <img src={article.image || noImage} alt={article.title} />
                   <h3>
                       {article.title}
-                    <i className="fa-regular fa-bookmark bookmark"></i>
+                      <i className={`${bookmarks.some((bookmark)=>
+                bookmark.title === article.title) ? "fa-solid" : "fa-regular"} fa-bookmark bookmark`}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleBookmarkClick(article)
+                }}  ></i>
                   </h3>
                 </div>
               ))}
             </div>
           </div>
           <NewsModal show={showModal} article={selectedArticle} onClose={()=>setShowModal(false)}/>
-          <Bookmarks />
+          <Bookmarks show={showBookmarksModal} bookmarks={bookmarks} 
+          onClose={()=>setShowBookmarksModal(false)}
+          onSelectArticle={handleArticle}
+          onDeleteBookmark={handleBookmarkClick}
+          />
           <div className="my-blogs">My blogs</div>
           <div className="others-blogs">Others blogs</div>
         </div>
