@@ -19,7 +19,7 @@ const categories = [
   'nation',
 ]
 
-const Blogs = ({  onLogin, handleLogout }) => {
+const Blogs = ({  onLogin, handleLogout, onShowBlogs }) => {
 
   //state for storing main news article on the page
   const [ headline, setHeadline ] = useState([])
@@ -158,7 +158,7 @@ const Blogs = ({  onLogin, handleLogout }) => {
               ) : (
                 <div style={{ color: "#919db1" , fontSize: 15 }}>Guest user</div>
               )}
-              <img src={userImage} alt="User image"></img>
+              <img src={userImage} alt="User image" onClick={onShowBlogs}></img>
             </div>
             <nav className="categories">
               <h1 className="nav-heading">Categories</h1>
