@@ -10,7 +10,7 @@ import { useToast } from '@chakra-ui/react'
 const cookies = new Cookies()
 
 
-const Login = ({handleLogin}) => {
+const Login = () => {
 
   
   //state for email
@@ -70,7 +70,7 @@ const submitHandler = async () => {
             { email, password },
             config
         )
-
+        
         toast({
             title: 'Login successful.',
             description: "You are now loged in",
@@ -79,10 +79,11 @@ const submitHandler = async () => {
             isClosable: true,
             position: 'bottom',
         })
-        
+        //setting login to true instead of handle login function
+        localStorage.setItem("login", "true")
         localStorage.setItem("userInfo", JSON.stringify(data))
         setLoading(false)
-        handleLogin()
+        
 
          // set the cookie
          cookies.set("TOKEN", data.token, {

@@ -42,39 +42,37 @@ const handleShowBlogs = () => {
 }
 
 //state for determening whether user is logged in or not
-const [login, setLogin] = useState(null);
+//const [login, setLogin] = useState(null);
 
 //function to set login to true
-const handleLogin = () => {
-  setLogin(true)
-}
+//const handleLogin = () => {
+  //setLogin(true)
+  //console.log(login)
+//}
 
 //function to set login to false
 const handleLogout = () => {
-  setLogin(false)
+  ///setLogin(false)
+  localStorage.removeItem("login")
   // destroy the cookie
   cookies.remove("TOKEN", { path: "/" })
   // redirect user to the landing page
   window.location.href = "/";
 }
 
-//setting key login in local storage to true
-if(login === true){
-  localStorage.setItem('login', JSON.stringify(login))
-}
 
 //removing key login from local storage
-if(login === false){
-  localStorage.removeItem("login");
-}
+/////if(login === false){
+//  localStorage.removeItem("login");
+//}
 
 
   return (
     <div className="container">
       <div className="blog-posts">
-        {showHome && <Blogs onShowBlogs={handleShowBlogs} onLogin={handleShowSignUp} handleLogin={handleLogin} handleLogout={handleLogout}  />}
+        {showHome && <Blogs onShowBlogs={handleShowBlogs} onLogin={handleShowSignUp}  handleLogout={handleLogout} />}
         {showBlogs && <CreateBlog onShowHome={handleBackToHome} />}
-        {showSignUp && <SignUp onShowHome={handleBackToHome} login={login} handleLogin={handleLogin} />}
+        {showSignUp && <SignUp onShowHome={handleBackToHome}  />}
       </div>
     </div>
   )
