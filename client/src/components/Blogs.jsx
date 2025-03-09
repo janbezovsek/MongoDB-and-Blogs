@@ -3,6 +3,7 @@ import axios from "axios";
 import "./Blogs.css";
 import userImage from '../assets/images/userImage.jpg'
 import noImage from '../assets/images/noImage.jpeg'
+import treeImage from '../assets/images/tree.jpg'
 import NewsModal from "./NewsModal";
 import Bookmarks from "./Bookmarks";
 
@@ -217,8 +218,104 @@ const Blogs = ({  onLogin, handleLogout, onShowBlogs }) => {
           onSelectArticle={handleArticle}
           onDeleteBookmark={handleBookmarkClick}
           />
-          <div className="my-blogs">My blogs</div>
-          <div className="others-blogs">Others blogs</div>
+          <div className="my-blogs">
+            <h1 className="my-blogs-heading">
+              My Blogs
+            </h1>
+            <div className="blog-posts-content">
+              <div className="new-blog-post-content">
+                <img src={treeImage} alt="Post Image"  />
+                <h3>ekrgeg egrg gertg</h3>
+                <div className="post-buttons">
+                  <button className="edit-post">
+                  <i className="fas fa-edit"></i>
+                  </button>
+                  <button className="delete-post">
+                    <i className="fas fa-window-close"></i>
+                  </button>
+                </div>
+              </div>
+              <div className="new-blog-post-content">
+                <img src={treeImage} alt="Post Image"  />
+                <h3>ekrgeg egrg gertg</h3>
+                <div className="post-buttons">
+                  <button className="edit-post">
+                  <i className="fas fa-edit"></i>
+                  </button>
+                  <button className="delete-post">
+                  <i className="fas fa-window-close"></i>
+                  </button>
+                </div>
+              </div>
+              <div className="new-blog-post-content">
+                <img src={treeImage} alt="Post Image"  />
+                <h3>ekrgeg egrg gertg</h3>
+                <div className="post-buttons">
+                  <button className="edit-post">
+                  <i className="fas fa-edit"></i>
+                  </button>
+                  <button className="delete-post">
+                  <i className="fas fa-window-close"></i>
+                  </button>
+                </div>
+              </div>
+              <div className="new-blog-post-content">
+                <img src={treeImage} alt="Post Image"  />
+                <h3>ekrgeg egrg gertg</h3>
+                <div className="post-buttons">
+                  <button className="edit-post">
+                  <i className="fas fa-edit"></i>
+                  </button>
+                  <button className="delete-post">
+                  <i className="fas fa-window-close"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="others-blogs">
+          <h1 className="other-blogs-heading">
+              Other Blogs
+          </h1>
+          <div className="blog-posts-content">
+              <div className="new-blog-post-content">
+                <img src={treeImage} alt="Post Image"  />
+                <h3>ekrgeg egrg gertg</h3>
+                <div className="post-buttons">
+                  <button className="edit-post">
+                  <i className="fas fa-edit"></i>
+                  </button>
+                  <button className="delete-post">
+                  <i className="fas fa-window-close"></i>
+                  </button>
+                </div>
+              </div>
+              <div className="new-blog-post-content">
+                <img src={treeImage} alt="Post Image"  />
+                <h3>ekrgeg egrg gertg</h3>
+                <div className="post-buttons">
+                  <button className="edit-post">
+                  <i className="fas fa-edit"></i>
+                  </button>
+                  <button className="delete-post">
+                  <i className="fas fa-window-close"></i>
+                  </button>
+                </div>
+              </div>
+              <div className="new-blog-post-content">
+                <img src={treeImage} alt="Post Image"  />
+                <h3>ekrgeg egrg gertg</h3>
+                <div className="post-buttons">
+                  <button className="edit-post">
+                  <i className="fas fa-edit"></i>
+                  </button>
+                  <button className="delete-post">
+                  <i className="fas fa-window-close"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <footer className="news-footer">
           <p>
