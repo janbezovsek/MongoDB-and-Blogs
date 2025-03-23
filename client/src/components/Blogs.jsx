@@ -8,6 +8,8 @@ import NewsModal from "./NewsModal";
 import Bookmarks from "./Bookmarks";
 
 
+
+
 const categories = [
   'general',
   'world',
@@ -49,15 +51,33 @@ const Blogs = ({  onLogin, handleLogout, onShowBlogs  }) => {
   //bookmarks modal visibility
   const [ showBookmarksModal, setShowBookmarksModal ] = useState(false)
 
+  // will update list as database updates on refreshing the site
+  //saved my blogs to show on the page
+  const [myList, setMyList] = useState([])
+  
+  // will update list as database updates on refreshing the site
+  //saved others blogs to show on the page in other blogs parts of the page
+  const [otherList, setOtherList] = useState([])
+
   //get login state for toggling between login and logout in navbar
   const state = JSON.parse(localStorage.getItem('login'));
 
   //userInfo we use to display the name of the user on the page
   let name = JSON.parse(localStorage.getItem('userInfo')).data.user.name
 
+  //userId we use to search for posts of the loged in user
+  let userId = JSON.parse(localStorage.getItem('userInfo')).data.user._id
+
+  //Bearer token for authorization
+  let token = JSON.parse(localStorage.getItem('userInfo')).data.token
+
+
+
+
 
   //fetching API for news
   useEffect(() => {
+    
     const fetchNews = async () => {
       let URL = `https://gnews.io/api/v4/top-headlines?category=${selectedCategory}&lang=en&apikey=ad9380e55df5fcb1adc1f84a98faf1c6`
     
@@ -90,6 +110,86 @@ const Blogs = ({  onLogin, handleLogout, onShowBlogs  }) => {
     }
     fetchNews()
   },[selectedCategory, searchQuery])
+
+
+  //fetching posts from database collection(MongoDB) for loged in user
+  useEffect(() => {
+
+    let isMounted1 = true
+
+    const fetchBlogPosts = async () => {
+
+try {
+const configuration = {
+  method: "get",
+  url: `http://localhost:5000/api/v1/post/${userId}`,
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`,
+  },
+}
+
+// make the API call
+ const  responsePosts  = await axios(configuration)
+ 
+ //saving response to variable
+ const responseBlogs = responsePosts
+
+    //seting data
+    if(isMounted1){
+      setMyList(responseBlogs.data.data)
+      console.log(responseBlogs.data.data)
+      }
+  } catch(error)  {
+    if(isMounted1){
+      console.log(error)
+    }
+  }
+    }
+    //call blog posts
+    fetchBlogPosts()
+    return () => {
+      isMounted1 = false
+    }
+    },[])
+
+
+
+    //fetching all posts from database collection(MongoDB)
+    //and displaying them in others blogs part of the site
+  useEffect(() => {
+      let isMounted = true
+      const fetchAllBlogs = async () => {
+
+try {
+    const configuration = {
+      method: "get",
+      url: "http://localhost:5000/api/v1/post/all",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    };
+
+    // make the API call
+      const response = await axios(configuration)
+        if(isMounted) { 
+          setOtherList(response.data.data);
+          console.log(response.data.data)}
+      }
+      catch(error)  {
+        if(isMounted) {
+        console.log(error)
+        }
+      }
+      }
+      //call function
+      fetchAllBlogs()
+      return () => {
+        isMounted = false
+      }
+  },[])
+
 
   //function for selecting news category
   const handleCategory = (e, category) => {
@@ -155,11 +255,13 @@ const Blogs = ({  onLogin, handleLogout, onShowBlogs  }) => {
           <div className="navbar">
             <div className="user">
               {state && name ? (
+                <>
                 <div style={{ color: "#919db1" , fontSize: 15 }}>Welcome back {name}</div>
+                <img src={userImage} alt="User image" onClick={onShowBlogs}></img>
+                </>
               ) : (
                 <div style={{ color: "#919db1" , fontSize: 15 }}>Guest user</div>
               )}
-              <img src={userImage} alt="User image" onClick={onShowBlogs}></img>
             </div>
             <nav className="categories">
               <h1 className="nav-heading">Categories</h1>
@@ -218,63 +320,31 @@ const Blogs = ({  onLogin, handleLogout, onShowBlogs  }) => {
           onSelectArticle={handleArticle}
           onDeleteBookmark={handleBookmarkClick}
           />
-          {state ? (
+          {state && myList ? (
+
+            
               <div className="my-blogs">
               <h1 className="my-blogs-heading">
                 My Blogs
               </h1>
               <div className="blog-posts-content">
-                <div className="new-blog-post-content">
-                  <img src={treeImage} alt="Post Image"  />
-                  <h3>ekrgeg egrg gertg</h3>
-                  <div className="post-buttons">
-                    <button className="edit-post">
-                    <i className="fas fa-edit"></i>
-                    </button>
-                    <button className="delete-post">
-                      <i className="fas fa-window-close"></i>
-                    </button>
+                {myList.map((blogPosts,index) => (
+                    <div className="new-blog-post-content" key={index}>
+                    <img src={treeImage} alt="Post Image"  />
+                    <h3>{blogPosts.title}</h3>
+                    <div className="post-buttons">
+                      <button className="edit-post">
+                        <i className="fas fa-edit"></i>
+                        </button>
+                      <button className="delete-post">
+                        <i className="fas fa-window-close"></i>
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <div className="new-blog-post-content">
-                  <img src={treeImage} alt="Post Image"  />
-                  <h3>ekrgeg egrg gertg</h3>
-                  <div className="post-buttons">
-                    <button className="edit-post">
-                    <i className="fas fa-edit"></i>
-                    </button>
-                    <button className="delete-post">
-                    <i className="fas fa-window-close"></i>
-                    </button>
-                  </div>
-                </div>
-                <div className="new-blog-post-content">
-                  <img src={treeImage} alt="Post Image"  />
-                  <h3>ekrgeg egrg gertg</h3>
-                  <div className="post-buttons">
-                    <button className="edit-post">
-                    <i className="fas fa-edit"></i>
-                    </button>
-                    <button className="delete-post">
-                    <i className="fas fa-window-close"></i>
-                    </button>
-                  </div>
-                </div>
-                <div className="new-blog-post-content">
-                  <img src={treeImage} alt="Post Image"  />
-                  <h3>ekrgeg egrg gertg</h3>
-                  <div className="post-buttons">
-                    <button className="edit-post">
-                    <i className="fas fa-edit"></i>
-                    </button>
-                    <button className="delete-post">
-                    <i className="fas fa-window-close"></i>
-                    </button>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
-          ) : ( 
+            ) : ( 
           <div className="my-blogs">
           <h1 className="my-blogs-heading">
             My Blogs
@@ -284,28 +354,22 @@ const Blogs = ({  onLogin, handleLogout, onShowBlogs  }) => {
           </div>
           </div>
           )}
-          {state ? (
+          
+          {state && otherList ?  (
               <div className="others-blogs">
               <h1 className="other-blogs-heading">
                   Other Blogs
               </h1>
               <div className="blog-posts-content">
-                  <div className="new-blog-post-content">
-                    <img src={treeImage} alt="Post Image"  />
-                    <h3>ekrgeg egrg gertg</h3>
-                  </div>
-                  <div className="new-blog-post-content">
-                    <img src={treeImage} alt="Post Image"  />
-                    <h3>ekrgeg egrg gertg</h3>
-                  </div>
-                  <div className="new-blog-post-content">
-                    <img src={treeImage} alt="Post Image"  />
-                    <h3>ekrgeg egrg gertg</h3>
-                  </div>
-                </div>
+              {otherList.map((blogPosts,index) => (
+                <div className="new-blog-post-content" key={index}>
+                <img src={treeImage} alt="Post Image"  />
+                <h3>{blogPosts.title}</h3>
+                </div> 
+                ))}
+              </div>
               </div>
           ) : (
-            
               <div className="others-blogs">
               <h1 className="other-blogs-heading">
                 Other Blogs

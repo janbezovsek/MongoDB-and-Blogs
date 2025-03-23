@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import Blogs from './components/Blogs'
 import CreateBlog from './components/CreateBlog'
-//import Login from './components/Login'
-//import Register from './components/Register'
 import SignUp from './components/SignUp'
 import Cookies from "universal-cookie"
 const cookies = new Cookies();
@@ -18,6 +16,7 @@ const App = () => {
 
   //state for navigating to blogs
   const [ showBlogs, setShowBlogs ] = useState(false)
+
 
   //function for navigating to login page
   const handleShowSignUp = () => {
@@ -41,30 +40,17 @@ const handleShowBlogs = () => {
   setShowBlogs(true)
 }
 
-//state for determening whether user is logged in or not
-//const [login, setLogin] = useState(null);
-
-//function to set login to true
-//const handleLogin = () => {
-  //setLogin(true)
-  //console.log(login)
-//}
-
 //function to set login to false
 const handleLogout = () => {
   ///setLogin(false)
   localStorage.removeItem("login")
+
   // destroy the cookie
   cookies.remove("TOKEN", { path: "/" })
   // redirect user to the landing page
   window.location.href = "/";
 }
 
-
-//removing key login from local storage
-/////if(login === false){
-//  localStorage.removeItem("login");
-//}
 
 
   return (
