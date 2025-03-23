@@ -1,6 +1,7 @@
 const express = require('express')
 const rateLimit = require('express-rate-limit')
 const helmet = require('helmet')
+const cors = require('cors')
 const mongoSanitizer = require('express-mongo-sanitize')
 const globalErrorHandler = require('./utils/errors/GlobalErrorHandler')
 const AppErrorHandler = require('./utils/errors/appError')
@@ -9,6 +10,8 @@ const authRouter = require("./routes/authRoutes")
 
 
 const app = express()
+
+app.use(cors())
 
 //Setting HTTP security headers
 app.use(helmet())
