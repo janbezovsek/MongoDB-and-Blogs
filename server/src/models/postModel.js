@@ -17,6 +17,11 @@ const postSchema = new mongoose.Schema({
         maxLength: [1000, "Content can't be larger than 1000 characters"]
     }, 
 
+    userId: {
+        type: String,
+        required: [true, "Content can't be empty"],
+    }, 
+
     createdAt: {
         type: Date,
         default: Date.now()
