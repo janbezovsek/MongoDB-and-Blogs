@@ -8,8 +8,6 @@ import NewsModal from "./NewsModal";
 import Bookmarks from "./Bookmarks";
 
 
-
-
 const categories = [
   'general',
   'world',
@@ -59,6 +57,10 @@ const Blogs = ({  onLogin, handleLogout, onShowBlogs  }) => {
   //saved others blogs to show on the page in other blogs parts of the page
   const [otherList, setOtherList] = useState([])
 
+  // Track item to delete for delete blog post function
+  //custom confirmation modal for asking if you are sure you want to delete
+  //const [postToDelete, setPostToDelete] = useState(null); 
+
   //get login state for toggling between login and logout in navbar
   const state = JSON.parse(localStorage.getItem('login'));
 
@@ -77,13 +79,7 @@ userId = JSON.parse(localStorage.getItem('userInfo')).data.user._id
 
 //Bearer token for authorization
 token = JSON.parse(localStorage.getItem('userInfo')).data.token
-  }
-
-  
-
-
-
-
+}
 
 
   //fetching API for news
@@ -95,8 +91,6 @@ token = JSON.parse(localStorage.getItem('userInfo')).data.token
       if(searchQuery) {
         URL = `https://gnews.io/api/v4/search?q=${searchQuery}&lang=en&apikey=ad9380e55df5fcb1adc1f84a98faf1c6`
       }
-      
-      
       
       const response = await axios.get(URL)
 
@@ -127,7 +121,6 @@ token = JSON.parse(localStorage.getItem('userInfo')).data.token
     //and displaying them in others blogs part of the site
   useEffect(() => {
       
-
       if(state){
         let isMounted = true
       const fetchAllBlogs = async () => {
@@ -163,15 +156,12 @@ try {
     }
   },[state, token])
 
+  //fetching posts from database collection(MongoDB) for loged in user
+  useEffect(() => {
 
-   //fetching posts from database collection(MongoDB) for loged in user
-   useEffect(() => {
-
-   
     if(state){
-       let isActive = true
+        let isActive = true
         const fetchBlogPosts = async () => {
-          
     try {
     const config = {
       method: "get",
@@ -183,8 +173,7 @@ try {
     };
     
     // make the API call
-     const  responsePosts  = await axios(config)
-     console.log("my blogs")
+      const  responsePosts  = await axios(config)
         //seting data
         if(isActive){
           setMyList(responsePosts.data.data)
@@ -194,7 +183,7 @@ try {
           console.log(error)
         }
       }
-        }
+      }
       
         //call blog posts
         fetchBlogPosts()
@@ -203,6 +192,28 @@ try {
         }
       }
         },[onLogin,state,token,userId])
+
+  //function for deleting a blog post 
+  const deleteBlogPost = async (id) => {
+    //_id of the blog post saved on the MongoDB
+    let ID = id
+    try {
+      const configDelete = {
+        method: "delete",
+        url: `http://localhost:5000/api/v1/post/${ID}`,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+      }
+      // make the API call
+      await axios(configDelete)
+      //refresh page
+      window.location.href = "/";
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
 
   //function for selecting news category
@@ -335,8 +346,6 @@ try {
           onDeleteBookmark={handleBookmarkClick}
           />
           {state && myList ? (
-
-            
               <div className="my-blogs">
               <h1 className="my-blogs-heading">
                 My Blogs
@@ -350,7 +359,7 @@ try {
                       <button className="edit-post">
                         <i className="fas fa-edit"></i>
                         </button>
-                      <button className="delete-post">
+                      <button className="delete-post" onClick={()=> deleteBlogPost(myPosts._id)}>
                         <i className="fas fa-window-close"></i>
                       </button>
                     </div>
@@ -368,7 +377,6 @@ try {
           </div>
           </div>
           )}
-          
           {state && otherList ?  (
               <div className="others-blogs">
               <h1 className="other-blogs-heading">
@@ -393,7 +401,6 @@ try {
               </div>
               </div>
           )}
-          
         </div>
         <footer className="news-footer">
           <p>
