@@ -62,14 +62,25 @@ const Blogs = ({  onLogin, handleLogout, onShowBlogs  }) => {
   //get login state for toggling between login and logout in navbar
   const state = JSON.parse(localStorage.getItem('login'));
 
-  //userInfo we use to display the name of the user on the page
-  let name = JSON.parse(localStorage.getItem('userInfo')).data.user.name
+  let name = ""
 
-  //userId we use to search for posts of the loged in user
-  let userId = JSON.parse(localStorage.getItem('userInfo')).data.user._id
+  let userId = ""
 
-  //Bearer token for authorization
-  let token = JSON.parse(localStorage.getItem('userInfo')).data.token
+  let token = ""
+
+  if(state) {
+//userInfo we use to display the name of the user on the page
+name = JSON.parse(localStorage.getItem('userInfo')).data.user.name
+
+//userId we use to search for posts of the loged in user
+userId = JSON.parse(localStorage.getItem('userInfo')).data.user._id
+
+//Bearer token for authorization
+token = JSON.parse(localStorage.getItem('userInfo')).data.token
+  }
+
+  
+
 
 
 
@@ -112,53 +123,13 @@ const Blogs = ({  onLogin, handleLogout, onShowBlogs  }) => {
   },[selectedCategory, searchQuery])
 
 
-  //fetching posts from database collection(MongoDB) for loged in user
-  useEffect(() => {
-
-    let isMounted1 = true
-
-    const fetchBlogPosts = async () => {
-
-try {
-const configuration = {
-  method: "get",
-  url: `http://localhost:5000/api/v1/post/${userId}`,
-  headers: {
-    "Content-Type": "application/json",
-    "Authorization": `Bearer ${token}`,
-  },
-}
-
-// make the API call
- const  responsePosts  = await axios(configuration)
- 
- //saving response to variable
- const responseBlogs = responsePosts
-
-    //seting data
-    if(isMounted1){
-      setMyList(responseBlogs.data.data)
-      console.log(responseBlogs.data.data)
-      }
-  } catch(error)  {
-    if(isMounted1){
-      console.log(error)
-    }
-  }
-    }
-    //call blog posts
-    fetchBlogPosts()
-    return () => {
-      isMounted1 = false
-    }
-    },[])
-
-
-
     //fetching all posts from database collection(MongoDB)
     //and displaying them in others blogs part of the site
   useEffect(() => {
-      let isMounted = true
+      
+
+      if(state){
+        let isMounted = true
       const fetchAllBlogs = async () => {
 
 try {
@@ -173,6 +144,7 @@ try {
 
     // make the API call
       const response = await axios(configuration)
+      console.log("isMounted")
         if(isMounted) { 
           setOtherList(response.data.data);
           console.log(response.data.data)}
@@ -188,7 +160,49 @@ try {
       return () => {
         isMounted = false
       }
-  },[])
+    }
+  },[state, token])
+
+
+   //fetching posts from database collection(MongoDB) for loged in user
+   useEffect(() => {
+
+   
+    if(state){
+       let isActive = true
+        const fetchBlogPosts = async () => {
+          
+    try {
+    const config = {
+      method: "get",
+      url: `http://localhost:5000/api/v1/post/${userId}`,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    };
+    
+    // make the API call
+     const  responsePosts  = await axios(config)
+     console.log("my blogs")
+        //seting data
+        if(isActive){
+          setMyList(responsePosts.data.data)
+          console.log(responsePosts.data.data)}
+      } catch(error)  {
+        if(isActive){
+          console.log(error)
+        }
+      }
+        }
+      
+        //call blog posts
+        fetchBlogPosts()
+        return () => {
+          isActive = false
+        }
+      }
+        },[onLogin,state,token,userId])
 
 
   //function for selecting news category
@@ -328,10 +342,10 @@ try {
                 My Blogs
               </h1>
               <div className="blog-posts-content">
-                {myList.map((blogPosts,index) => (
+                {myList.map((myPosts,index) => (
                     <div className="new-blog-post-content" key={index}>
                     <img src={treeImage} alt="Post Image"  />
-                    <h3>{blogPosts.title}</h3>
+                    <h3>{myPosts.title}</h3>
                     <div className="post-buttons">
                       <button className="edit-post">
                         <i className="fas fa-edit"></i>

@@ -9,38 +9,30 @@ import { useToast } from '@chakra-ui/react'
 
 const cookies = new Cookies()
 
-
 const Login = () => {
 
-  
-  //state for email
-  const [email, setEmail] = useState("")
+//state for email
+const [email, setEmail] = useState("")
 
-  //state for password
-  const [password, setPassword] = useState("")
+//state for password
+const [password, setPassword] = useState("")
 
+const [show, setShow] = useState(false)
 
-  const [show, setShow] = useState(false)
+const [loading, setLoading] = useState(false)
 
-  const [loading, setLoading] = useState(false)
-
-  //for form functionality when typed in data is correct or false
-  const toast = useToast()
-
-  //const history = useNavigate()
+//for form functionality when typed in data is correct or false
+const toast = useToast()
 
 
-
-  const handleClick = () => {
+const handleClick = () => {
     setShow(!show)
 }
-
 
 //function for login to our account(connection to backend)
 const submitHandler = async () => {
 
-    setLoading(true)
-
+setLoading(true)
     if( !email && !password ) {
         toast({
             title: 'Please fill all of the fields.',
@@ -54,8 +46,6 @@ const submitHandler = async () => {
         return
     }
 
-
-    
     //sending our data to designated API
     try {
         const config = {
@@ -64,13 +54,11 @@ const submitHandler = async () => {
             }
         }
 
-
-        const { data } = await axios.post(
+    const { data } = await axios.post(
             "http://localhost:5000/api/v1/auth/login", 
             { email, password },
             config
         )
-        
         toast({
             title: 'Login successful.',
             description: "You are now loged in",
@@ -84,16 +72,13 @@ const submitHandler = async () => {
         localStorage.setItem("userInfo", JSON.stringify(data))
         setLoading(false)
         
-
          // set the cookie
-         cookies.set("TOKEN", data.token, {
+        cookies.set("TOKEN", data.token, {
             path: "/",
-          });
+        });
           // redirect user to the home page
-          window.location.href = "/";
-
+        window.location.href = "/";
     } catch (error) {
-        
         toast({
             title: 'Error occured.',
             description: error.response.data.message,
@@ -104,32 +89,17 @@ const submitHandler = async () => {
         })
         setLoading(false)
     }
-
-
 }
 
-
-
-
-
-
-
-
-  return (
+return (
     <>
-
-
-    
     <VStack spacing="5px">
-        
-
         <FormControl id="email" isRequired>
             <FormLabel>
                 Email
             </FormLabel>
             <Input placeholder="Enter your email" value={email} onChange={(e)=>setEmail(e.target.value)}></Input>
         </FormControl>
-
         <FormControl id="password" isRequired>
             <FormLabel>
                 Password
@@ -143,7 +113,6 @@ const submitHandler = async () => {
             </InputRightElement>
             </InputGroup>  
         </FormControl>
-
         <Button
         colorScheme='blue'
         width="100%"
@@ -153,7 +122,6 @@ const submitHandler = async () => {
         >
             Login
         </Button>
-
         <Button
         variant="solid"
         width="100%"
@@ -166,10 +134,8 @@ const submitHandler = async () => {
             Get Guest user credentials
         </Button>
     </VStack>
-
-
     </>
-  )
+)
 }
 
 export default Login

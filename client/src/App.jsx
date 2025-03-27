@@ -7,7 +7,6 @@ const cookies = new Cookies();
 
 const App = () => {
 
-
   //state for navigating to Home page
   const [ showHome, setShowHome ] = useState(true)
 
@@ -32,7 +31,6 @@ const App = () => {
     setShowBlogs(false)
   }
 
-
 //function for navigating to Blogs page
 const handleShowBlogs = () => {
   setShowHome(false)
@@ -44,14 +42,13 @@ const handleShowBlogs = () => {
 const handleLogout = () => {
   ///setLogin(false)
   localStorage.removeItem("login")
-
+  //destroy userInfo
+  localStorage.removeItem("userInfo")
   // destroy the cookie
   cookies.remove("TOKEN", { path: "/" })
   // redirect user to the landing page
   window.location.href = "/";
 }
-
-
 
   return (
     <div className="container">
