@@ -6,6 +6,7 @@ import noImage from '../assets/images/noImage.jpeg'
 import treeImage from '../assets/images/tree.jpg'
 import NewsModal from "./NewsModal";
 import Bookmarks from "./Bookmarks";
+import BlogsModal from "./BlogsModal";
 
 
 const categories = [
@@ -59,7 +60,25 @@ const Blogs = ({  onLogin, handleLogout, onShowBlogs  }) => {
 
   // Track item to delete for delete blog post function
   //custom confirmation modal for asking if you are sure you want to delete
-  //const [postToDelete, setPostToDelete] = useState(null); 
+  const [postToDelete, setPostToDelete] = useState(null);
+  
+  //array for single blog post while modal is open
+  //to display when modal is clicked
+  //for loged in users posts
+  const [selectedPost, setSelectedPost] = useState([])
+
+  //visibility of blog post modal
+  //for loged in users posts
+  const [showBlogModal, setShowBlogModal] = useState(false)
+
+  //array for single blog post while modal is open
+  //to display when modal is clicked
+  //for all posts
+  const [selectedPostAll, setSelectedPostAll] = useState([])
+
+  //visibility of blog post modal
+  //for all posts
+  const [showBlogModalAll, setShowBlogModalAll] = useState(false)
 
   //get login state for toggling between login and logout in navbar
   const state = JSON.parse(localStorage.getItem('login'));
@@ -193,10 +212,18 @@ try {
       }
         },[onLogin,state,token,userId])
 
+  
+
+  const handleDeleteRequest = (id) => {
+    setPostToDelete(id); // Set post id for confirmation
+  };
+
   //function for deleting a blog post 
-  const deleteBlogPost = async (id) => {
+  //showing a modal for accepting or canceling delete request from the user
+  const deleteBlogPost = async () => {
+    if (postToDelete) {
     //_id of the blog post saved on the MongoDB
-    let ID = id
+    let ID = postToDelete
     try {
       const configDelete = {
         method: "delete",
@@ -208,12 +235,18 @@ try {
       }
       // make the API call
       await axios(configDelete)
+      setPostToDelete(null); // Hide modal
       //refresh page
       window.location.href = "/";
     } catch (error) {
       console.log(error)
     }
   }
+}
+//cancel delete request from pop up modal
+const cancelDelete = () => {
+  setPostToDelete(null); // Hide modal without deleting
+};
 
 
   //function for selecting news category
@@ -246,6 +279,32 @@ try {
       return updatedBookmarks
     })
   }
+
+  //blog post modal function for loged in users posts
+  const handleShowBlogPostModal = (post) => {
+    setShowBlogModal(true)
+    setSelectedPost(post)
+  }
+
+  //blog post modal function for loged in users posts
+  const closeBlogPostModal = () => {
+    setShowBlogModal(false)
+    setSelectedPost(null)
+  }
+
+    //blog post modal function for all posts
+    const handleShowBlogPostModalAll = (post) => {
+      setShowBlogModalAll(true)
+      setSelectedPostAll(post)
+    }
+  
+    //blog post modal function for all posts
+    const closeBlogPostModalAll = () => {
+      setShowBlogModalAll(false)
+      setSelectedPostAll(null)
+    }
+
+
 
   return (
     <>
@@ -353,18 +412,70 @@ try {
               <div className="blog-posts-content">
                 {myList.map((myPosts,index) => (
                     <div className="new-blog-post-content" key={index}>
-                    <img src={treeImage} alt="Post Image"  />
+                    <img src={treeImage} alt="Post Image"  onClick={()=> handleShowBlogPostModal(myPosts)}/>
                     <h3>{myPosts.title}</h3>
                     <div className="post-buttons">
                       <button className="edit-post">
                         <i className="fas fa-edit"></i>
                         </button>
-                      <button className="delete-post" onClick={()=> deleteBlogPost(myPosts._id)}>
+                      <button className="delete-post" onClick={()=> handleDeleteRequest(myPosts._id)}>
                         <i className="fas fa-window-close"></i>
                       </button>
                     </div>
                   </div>
                 ))}
+                {showBlogModal && (<BlogsModal closeModal={closeBlogPostModal}  selectedPost={selectedPost} />)}
+                {postToDelete && (
+        <div
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            background: "white",
+            padding: "20px",
+            border: "1px solid #ccc",
+            borderRadius: "5px",
+            boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+            zIndex: 1000,
+          }}
+        >
+          <h3>Confirm Deletion</h3>
+          <p>
+            Are you sure you want to delete? This action
+            cannot be undone.
+          </p>
+          <div style={{ marginTop: "20px" }}>
+            <button
+              onClick={deleteBlogPost}
+              style={{
+                background: "#ff4d4d",
+                color: "white",
+                border: "none",
+                padding: "8px 15px",
+                marginRight: "10px",
+                borderRadius: "3px",
+                cursor: "pointer",
+              }}
+            >
+              Yes, Delete
+            </button>
+            <button
+              onClick={cancelDelete}
+              style={{
+                background: "#ccc",
+                color: "black",
+                border: "none",
+                padding: "8px 15px",
+                borderRadius: "3px",
+                cursor: "pointer",
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
               </div>
             </div>
             ) : ( 
@@ -385,10 +496,11 @@ try {
               <div className="blog-posts-content">
               {otherList.map((blogPosts,index) => (
                 <div className="new-blog-post-content" key={index}>
-                <img src={treeImage} alt="Post Image"  />
+                <img src={treeImage} alt="Post Image" onClick={()=> handleShowBlogPostModalAll(blogPosts)} />
                 <h3>{blogPosts.title}</h3>
                 </div> 
                 ))}
+                {showBlogModalAll && (<BlogsModal closeModal={closeBlogPostModalAll}  selectedPost={selectedPostAll} />)}
               </div>
               </div>
           ) : (
