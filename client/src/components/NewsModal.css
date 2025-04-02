@@ -18,6 +18,11 @@
     border-radius: 1rem;
     box-shadow: 0 0 5rem 4rem rgba(0, 0, 0, 0.5);
     position: relative;
+    overflow-y: scroll;
+}
+
+.modal-content::-webkit-scrollbar {
+    display: none;
 }
 
 .close-button {

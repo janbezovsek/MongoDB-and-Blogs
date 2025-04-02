@@ -159,7 +159,8 @@ try {
       console.log("isMounted")
         if(isMounted) { 
           setOtherList(response.data.data);
-          console.log(response.data.data)}
+          //console.log(response.data.data)
+        }
       }
       catch(error)  {
         if(isMounted) {
@@ -196,7 +197,8 @@ try {
         //seting data
         if(isActive){
           setMyList(responsePosts.data.data)
-          console.log(responsePosts.data.data)}
+          //console.log(responsePosts.data.data)
+        }
       } catch(error)  {
         if(isActive){
           console.log(error)
