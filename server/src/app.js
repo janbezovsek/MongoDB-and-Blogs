@@ -54,16 +54,20 @@ app.use((req, res, next) => {
 app.use("/api/v1/post", postRouter)
 app.use("/api/v1/auth", authRouter)
 
-//Error handler for not defined routes
-app.use("*",(req, res, next) => {
 
-    const error = new AppErrorHandler("Route is not defined", 404)
-
-    next(error)
-})
 
 //Global error handler
 app.use(globalErrorHandler)
+
+
+
+//Error handler for not defined routes
+app.all("*",(req, res, next) => {
+
+  const error = new AppErrorHandler("Route is not defined", 404)
+
+  next(error)
+})
 
 
 
