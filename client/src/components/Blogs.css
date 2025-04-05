@@ -364,7 +364,7 @@
     cursor: pointer;
 }
 
-@media(max-width:1400px) {
+@media(min-width:1200px) {
     .nav-links {
     row-gap: 1rem;
     }

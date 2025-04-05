@@ -156,7 +156,7 @@ try {
 
     // make the API call
       const response = await axios(configuration)
-      console.log("isMounted")
+      //console.log("isMounted")
         if(isMounted) { 
           setOtherList(response.data.data);
           //console.log(response.data.data)
