@@ -29,6 +29,10 @@ const limiter = rateLimit({
 	message: "Too many requests, please try later"
 })
 
+app.get('/',(req, res) => {
+  res.send('Backend is alive')
+})
+
 //It's used for all routes in this case
 app.use("/api", limiter)
 
