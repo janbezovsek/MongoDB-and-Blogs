@@ -1,9 +1,11 @@
-import { useState } from 'react'
-import Blogs from './components/Blogs'
-import CreateBlog from './components/CreateBlog'
-import SignUp from './components/SignUp'
+import { useState,  lazy, Suspense  } from 'react'
+const Blogs = lazy(() => import('./components/Blogs'))
+const CreateBlog = lazy(() => import('./components/CreateBlog'))
+const SignUp = lazy(() => import('./components/SignUp'))
 import Cookies from "universal-cookie"
 const cookies = new Cookies();
+
+const renderLoader = () => <p>Loading</p>;
 
 const App = () => {
 
@@ -53,9 +55,11 @@ const handleLogout = () => {
   return (
     <div className="container">
       <div className="blog-posts">
+        <Suspense fallback={renderLoader()}>
         {showHome && <Blogs onShowBlogs={handleShowBlogs} onLogin={handleShowSignUp}  handleLogout={handleLogout} />}
         {showBlogs && <CreateBlog onShowHome={handleBackToHome} />}
         {showSignUp && <SignUp onShowHome={handleBackToHome}  />}
+        </Suspense>
       </div>
     </div>
   )
