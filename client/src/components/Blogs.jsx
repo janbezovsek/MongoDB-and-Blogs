@@ -147,7 +147,7 @@ token = JSON.parse(localStorage.getItem('userInfo')).data.token
 try {
     const configuration = {
       method: "get",
-      url: "http://localhost:5000/api/v1/post/all",
+      url: "https://mongodb-and-blogs.onrender.com/api/v1/post/all",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,
@@ -185,7 +185,7 @@ try {
     try {
     const config = {
       method: "get",
-      url: `http://localhost:5000/api/v1/post/${userId}`,
+      url: `https://mongodb-and-blogs.onrender.com/api/v1/post/${userId}`,
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,
@@ -229,7 +229,7 @@ try {
     try {
       const configDelete = {
         method: "delete",
-        url: `http://localhost:5000/api/v1/post/${ID}`,
+        url: `https://mongodb-and-blogs.onrender.com/api/v1/post/${ID}`,
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
