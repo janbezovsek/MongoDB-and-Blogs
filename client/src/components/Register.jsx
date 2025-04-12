@@ -79,7 +79,7 @@ const Register = () => {
 
 
         const { data } = await axios.post(
-            "http://localhost:5000/api/v1/auth/signup", 
+            "https://mongodb-and-blogs.onrender.com/api/v1/auth/signup", 
             { name, email, password, confirmPassword },
             config
         )
