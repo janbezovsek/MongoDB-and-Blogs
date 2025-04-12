@@ -55,7 +55,7 @@ setLoading(true)
         }
 
     const { data } = await axios.post(
-            "http://mongodb-and-blogs.onrender.com/api/v1/auth/login", 
+            "https://mongodb-and-blogs.onrender.com/api/v1/auth/login", 
             { email, password },
             config
         )
