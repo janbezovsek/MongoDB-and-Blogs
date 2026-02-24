@@ -7,6 +7,7 @@ const globalErrorHandler = require('./utils/errors/GlobalErrorHandler')
 const AppErrorHandler = require('./utils/errors/appError')
 const postRouter = require("./routes/postRoutes")
 const authRouter = require("./routes/authRoutes")
+const newsRouter = require('./routes/newsRoutes')
 
 
 const app = express()
@@ -55,6 +56,7 @@ app.use((req, res, next) => {
 
 
 //Routes
+app.use("/api/v1/news", newsRouter)
 app.use("/api/v1/post", postRouter)
 app.use("/api/v1/auth", authRouter)
 
