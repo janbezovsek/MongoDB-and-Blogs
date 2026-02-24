@@ -105,13 +105,12 @@ token = JSON.parse(localStorage.getItem('userInfo')).data.token
   useEffect(() => {
     
     const fetchNews = async () => {
-      let URL = `https://gnews.io/api/v4/top-headlines?category=${selectedCategory}&lang=en&apikey=ad9380e55df5fcb1adc1f84a98faf1c6`
-    
-      if(searchQuery) {
-        URL = `https://gnews.io/api/v4/search?q=${searchQuery}&lang=en&apikey=ad9380e55df5fcb1adc1f84a98faf1c6`
-      }
+      const params = searchQuery
+      ? { q: searchQuery }
+      : { category: selectedCategory }
       
-      const response = await axios.get(URL)
+      const response = await axios.get('https://mongodb-and-blogs.onrender.com/api/v1/news',
+      { params })
 
       const fetchedNews = response.data.articles
 
